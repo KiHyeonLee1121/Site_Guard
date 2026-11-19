@@ -1,0 +1,4 @@
+# For development video, not needed by the standard-library Mock suite.
+numpy==1.26.4
+opencv-python==4.11.0.86
+pyserial==3.5

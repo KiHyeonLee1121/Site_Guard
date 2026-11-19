@@ -1,0 +1,2 @@
+# OpenCV, NumPy, CUDA and TensorRT come from the JetPack/system stack.
+pyserial==3.5

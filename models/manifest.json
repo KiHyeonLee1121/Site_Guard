@@ -1,0 +1,23 @@
+{
+  "yolo11n": {
+    "version": "Ultralytics assets v8.3.0",
+    "url": "https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.pt",
+    "sha256": "0ebbc80d4a7680d14987a577cd21342b65ecfd94632bd9a8da63ae6417644ee1",
+    "input_sizes": [320, 416, 640],
+    "classes": "Read from the original weights. Exported to TensorRT metadata.",
+    "license_url": "https://www.ultralytics.com/license"
+  },
+  "ssd-mobilenet-v2": {
+    "version": "jetson-inference UFF COCO bundle",
+    "url": "https://nvidia.box.com/shared/static/jcdewxep8vamzm71zajcovza938lygre.gz",
+    "sha256": "7e61c5e52eda86537fb0d89fff4c2bd0c0ff997d084ad4cf0b23d46f58a3fc6a",
+    "input_sizes": [300],
+    "classes": "ssd_coco_labels.txt in the bundle",
+    "source_url": "https://github.com/dusty-nv/jetson-inference/blob/45da40a8f3c180191b269f57f736caaa025b8a69/tools/download-models.sh",
+    "license_url": "https://github.com/tensorflow/models/tree/master/research/object_detection",
+    "files": {
+      "ssd_coco_labels.txt": "91a065f5428eb7da3ca189d8a2157b2cd76c4b90a0ac0b293f2e0e3785ce0e6d",
+      "ssd_mobilenet_v2_coco.uff": "bcc956cfbdcff28e7d6e52e6fea12e6892c3c183b313e0685206ad86800ff364"
+    }
+  }
+}
