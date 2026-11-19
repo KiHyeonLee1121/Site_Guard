@@ -1,0 +1,14 @@
+{
+  "source": {"kind": "mock", "camera_index": 0, "width": 640, "height": 480, "fps": 20, "gstreamer": "", "reconnect_sec": 1.0, "stale_sec": 4.0},
+  "vision": {"backend": "mock", "model": "", "metadata": "", "confidence": 0.45, "input_size": 320, "device": "cpu", "idle_hz": 4.0, "active_hz": 12.0},
+  "tracker": {"ttl": 2.0, "min_iou": 0.15, "center_gate": 0.10, "max_tracks": 64},
+  "policy": {"dwell": {"person": 5.0, "dog": 3.0}, "critical_frames": 2, "roi_down_sec": 0.20, "clear_sec": 1.0, "max_dwell_gap": 0.60, "repeat_sec": 12.0, "max_repeats": 1, "person_first": true, "brightness": {"warning": 65, "critical": 100}},
+  "pir": {"hold_sec": 5.0, "emit_initial": false},
+  "serial": {"enabled": false, "port": "/dev/ttyACM0", "baud": 115200, "timeout": 0.35, "retries": 2, "heartbeat_sec": 0.75, "reconnect_sec": 1.0},
+  "storage": {"database": "data/siteguard.sqlite3", "retention_days": 30, "max_events": 50000},
+  "recording": {"enabled": false, "directory": "data/clips", "pre_sec": 2.0, "post_sec": 3.0, "fps": 5, "width": 480, "buffer_bytes": 8388608, "max_clip_bytes": 16777216, "max_total_bytes": 134217728, "retention_days": 7},
+  "cloud": {"enabled": false, "url": "", "timeout": 3.0, "retry_base_sec": 2.0, "retry_max_sec": 120.0},
+  "dashboard": {"enabled": false, "host": "127.0.0.1", "port": 8765, "preview_hz": 5.0, "preview_width": 640},
+  "roi_file": "config/roi.local.json",
+  "log_file": "data/siteguard.log"
+}

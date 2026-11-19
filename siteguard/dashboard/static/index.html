@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SiteGuard</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header><div class="brand"><span class="brand-mark" aria-hidden="true"></span>SiteGuard</div><span id="mode" class="pill">연결 중</span></header>
+  <main>
+    <div class="heading"><h1>현장 모니터링</h1><span id="health" role="status">상태 불러오는 중</span></div>
+    <div class="layout">
+      <section class="panel vision">
+        <div class="section-head"><h2>감시 영상</h2><span id="resolution"></span></div>
+        <div id="viewport">
+          <img id="frame" alt="SiteGuard 카메라 또는 테스트 영상" hidden>
+          <canvas id="overlay" width="640" height="480" aria-label="감지 객체와 ROI"></canvas>
+          <span id="empty-frame">영상 입력 대기</span>
+        </div>
+        <div class="legend"><span>ROI 1 관찰</span><span>ROI 2 주의</span><span>ROI 3 핵심</span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>종류</th><th>신뢰도</th><th>ROI</th><th>체류</th><th>상태</th></tr></thead>
+          <tbody id="tracks"></tbody>
+        </table></div>
+      </section>
+      <aside>
+        <section class="panel">
+          <div class="section-head"><h2>장치 상태</h2></div>
+          <dl id="devices"></dl>
+        </section>
+        <section class="panel">
+          <div class="section-head"><h2>ROI 설정</h2><button type="button" id="edit">편집</button></div>
+          <div class="editor" id="editor" hidden>
+            <p>영상 클릭으로 점을 추가하세요. 번호가 있는 꼭짓점은 드래그할 수 있습니다.</p>
+            <div class="inputs"><label>단계 <select id="zone-level"><option value="1">ROI 1</option><option value="2">ROI 2</option><option value="3">ROI 3</option></select></label>
+            <label>이름 <input id="zone-name" maxlength="80" autocomplete="off"></label></div>
+            <div class="buttons"><button type="button" id="undo">마지막 점 제거</button><button type="button" id="delete">구역 삭제</button></div>
+            <div class="buttons"><button type="button" id="reload">다시 불러오기</button><button type="button" id="save" class="primary">저장</button></div>
+          </div>
+          <div id="roi-info"></div>
+          <p id="roi-message" role="status"></p>
+        </section>
+        <details class="panel"><summary>판단 정책</summary><dl id="policy"></dl></details>
+      </aside>
+    </div>
+    <section class="panel events">
+      <div class="section-head"><h2>최근 이벤트</h2><span>UTC</span></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>시각</th><th>이벤트</th><th>객체</th><th>장치 응답</th><th>전송</th></tr></thead>
+        <tbody id="events"></tbody>
+      </table></div>
+      <pre id="event-detail" hidden></pre>
+    </section>
+  </main>
+</body>
+</html>

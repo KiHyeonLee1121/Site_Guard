@@ -1,0 +1,21 @@
+[Unit]
+Description=SiteGuard local monitoring engine
+After=local-fs.target
+StartLimitIntervalSec=90
+StartLimitBurst=5
+
+[Service]
+Type=simple
+User=siteguard
+SupplementaryGroups=video dialout
+WorkingDirectory=/opt/siteguard
+EnvironmentFile=-/opt/siteguard/.env
+ExecStart=/opt/siteguard/.venv-jetson/bin/python -m siteguard --config config/jetson.yaml
+Restart=on-failure
+RestartSec=4
+TimeoutStopSec=25
+KillSignal=SIGTERM
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

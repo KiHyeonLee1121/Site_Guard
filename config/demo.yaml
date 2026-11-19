@@ -1,0 +1,4 @@
+{
+  "dashboard": {"enabled": true},
+  "serial": {"enabled": false}
+}
