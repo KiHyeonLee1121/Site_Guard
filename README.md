@@ -2,6 +2,16 @@
 
 SiteGuard는 공사 현장 자재 구역의 사람과 개를 감지하고, 접근 구역과 체류 시간을 바탕으로 LED와 음향을 제어하는 오프라인 우선 Edge AI 엔진입니다. 카메라, 영상 파일, Mock 입력은 같은 추적·ROI·상태머신을 사용합니다. 현장 이벤트는 SQLite에 저장됩니다.
 
+## 작업 내역
+
+### 2026-11-20 (KST) — SiteGuard 초기 구현
+
+- 카메라·영상 파일·Mock 입력을 연결하고, 사람·개 검출과 객체 추적, 3단계 ROI, 체류 시간에 따른 경고·해제 로직을 구현했습니다.
+- Arduino Nano 33 BLE 펌웨어와 USB Serial 제어를 추가했습니다. 통신이 끊기면 LED와 음향 출력을 해제합니다.
+- 웹 대시보드에서 영상·이벤트 조회와 ROI 편집을 지원합니다. 이벤트와 영상 클립을 로컬에 저장하며, 네트워크 복구 후 전송 대기 이벤트를 재시도합니다.
+- Jetson Nano 4GB 설치·실행 스크립트와 모델 준비 절차를 추가했습니다. Jetson 기본 모델은 SSD-MobileNet-v2이고, PC 영상 검증에는 YOLO11n을 사용했습니다.
+- PC 자동 테스트 35개, 실제 개 영상 90프레임 처리, Arduino 펌웨어 컴파일, Mock 수신기 재전송을 확인했습니다. Jetson 실기기 추론과 실제 장치 연결, WISE-PaaS 테넌트 연동은 현장 검증이 남았습니다. [검증 보고서](docs/TEST_REPORT.md) · [구현 PR #1](https://github.com/KiHyeonLee1121/Site_Guard/pull/1)
+
 ## PC에서 바로 실행
 
 ~~~bash
