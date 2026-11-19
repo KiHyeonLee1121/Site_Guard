@@ -1,0 +1,6 @@
+{
+  "source": {"kind": "camera"},
+  "vision": {"backend": "jetson", "model": "models/local/jetson", "device": "cuda:0", "idle_hz": 3.0, "active_hz": 10.0},
+  "serial": {"enabled": true},
+  "dashboard": {"enabled": true}
+}

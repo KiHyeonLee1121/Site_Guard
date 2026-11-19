@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "siteguard-edge"
+version = "0.1.0"
+description = "SiteGuard offline-first Edge AI monitoring engine"
+requires-python = ">=3.6"
+readme = "README.md"
+license = {file = "LICENSE"}
+dependencies = []
+
+[project.scripts]
+siteguard = "siteguard.main:main"
+
+[tool.setuptools.packages.find]
+include = ["siteguard*"]
+
+[tool.setuptools.package-data]
+"siteguard.dashboard" = ["static/*.html", "static/*.css", "static/*.js"]
+
+[tool.setuptools.data-files]
+"share/siteguard/config" = ["config/default.yaml", "config/roi.example.json"]
