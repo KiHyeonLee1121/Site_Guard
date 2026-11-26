@@ -1,0 +1,4 @@
+{
+  "source": {"kind": "video"},
+  "vision": {"backend": "yolo", "model": "models/local/yolo11n.pt", "input_size": 640}
+}

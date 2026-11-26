@@ -16,6 +16,7 @@ class Pipeline:
         self.controller = controller
         self.states = {}
         self.roi_revision = None
+        self.roi_zones = []
 
     def reset(self):
         events = [event for state in self.states.values() for event in state.lost()]
@@ -32,6 +33,7 @@ class Pipeline:
         )
         tracked = perf_counter()
         revision, zones = self.roi.snapshot()
+        self.roi_zones = zones["zones"]
         if self.roi_revision != revision:
             expired = list(self.states)
             self.roi_revision = revision

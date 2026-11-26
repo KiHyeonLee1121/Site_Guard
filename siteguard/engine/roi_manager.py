@@ -74,12 +74,18 @@ def validate_zones(payload):
 
 
 class ROIManager:
-    def __init__(self, path, example):
+    def __init__(self, path, example, require_calibration=False):
         self.path = Path(path)
         self.example = Path(example)
         self.lock = Lock()
-        source = self.path if self.path.exists() else self.example
+        self.using_example = not self.path.exists()
+        if self.using_example and require_calibration:
+            raise ValueError("ROI calibration missing: {}. Save the actual tape polygons with the dashboard first."
+                             .format(self.path))
+        source = self.example if self.using_example else self.path
         self.payload = validate_zones(json.loads(source.read_text(encoding="utf-8")))
+        if require_calibration and not self.payload["zones"]:
+            raise ValueError("ROI calibration has no zones: {}".format(self.path))
         self.revision = 0
 
     def snapshot(self):
@@ -104,11 +110,16 @@ class ROIManager:
                 if os.path.exists(temporary):
                     os.unlink(temporary)
             self.payload = validated
+            self.using_example = False
             self.revision += 1
             return self.revision
 
     @staticmethod
-    def classify(payload, bbox, width, height):
+    def foot_point(bbox, width, height):
         x1, _, x2, y2 = bbox
-        point = ((x1 + x2) / (2 * width), y2 / height)
+        return ((x1 + x2) / (2 * width), y2 / height)
+
+    @staticmethod
+    def classify(payload, bbox, width, height):
+        point = ROIManager.foot_point(bbox, width, height)
         return max((z["level"] for z in payload["zones"] if contains(z["points"], point)), default=0)

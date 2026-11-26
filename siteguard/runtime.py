@@ -96,10 +96,12 @@ class Metrics:
 
 
 class Engine:
-    def __init__(self, config, args, stop, source, pipeline, actuator, events, dashboard, cloud, recorder):
+    def __init__(self, config, args, stop, source, pipeline, actuator, events, dashboard, cloud, recorder,
+                 annotated_video=None):
         self.config, self.args, self.stop = config, args, stop
         self.source, self.pipeline, self.actuator = source, pipeline, actuator
         self.events, self.dashboard, self.cloud, self.recorder = events, dashboard, cloud, recorder
+        self.annotated_video = annotated_video
         self.camera = config["source"]["kind"] == "camera"
         self.metrics = Metrics()
         self.pir = PIR(config["pir"])
@@ -232,6 +234,9 @@ class Engine:
             self.recorder.mark(clips, frame.timestamp)
         if command is not None:
             self.record("output", frame.timestamp, output=output, command=command)
+        if self.annotated_video is not None:
+            self.annotated_video.write(frame, self.source.fps, self.pipeline.roi_zones,
+                                       visible, statuses, transitions, output)
         if self.config["dashboard"]["enabled"]:
             statuses = {status.track_id: status for status in statuses}
             self.objects = [dict(id=obs.track_id, bbox=obs.detection.bbox, class_name=obs.detection.class_name,
@@ -270,8 +275,16 @@ class Engine:
 def run(config, args, stop):
     source_kind = config["source"]["kind"]
     with ExitStack() as resources:
-        roi = ROIManager(config["roi_file"], EXAMPLE_ROI)
+        roi = ROIManager(config["roi_file"], EXAMPLE_ROI,
+                         require_calibration=bool(args.output_video or config["serial"]["enabled"]))
+        if roi.using_example and source_kind != "mock":
+            LOG.warning("Using example ROI coordinates. Calibrate the actual tape boundaries and save %s.",
+                        config["roi_file"])
         source = make_source(config, args)
+        annotated_video = None
+        if args.output_video:
+            from siteguard.storage.annotated_video import AnnotatedVideo
+            annotated_video = resources.enter_context(AnnotatedVideo(args.output_video))
         detector = make_detector(config["vision"])
         if hasattr(detector, "close"):
             resources.callback(detector.close)
@@ -309,8 +322,12 @@ def run(config, args, stop):
         else:
             actuator = MockActuator()
         pipeline = Pipeline(detector, Tracker(config["tracker"]), roi, config["policy"], ActionController(actuator))
-        engine = Engine(config, args, stop, source, pipeline, actuator, events, dashboard_state, cloud, recorder)
+        engine = Engine(config, args, stop, source, pipeline, actuator, events, dashboard_state, cloud, recorder,
+                        annotated_video)
         result = engine.run()
+        if annotated_video is not None and not stop.is_set():
+            annotated_video.finish()
+            LOG.info("Annotated video written to %s", annotated_video.path)
         if args.stay_open and config["dashboard"]["enabled"] and not stop.is_set():
             LOG.info("Analysis complete. Dashboard remains open until interrupted.")
             while not stop.wait(0.5):
