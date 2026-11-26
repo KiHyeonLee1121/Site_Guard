@@ -17,6 +17,7 @@ def parse(argv=None):
     parser.add_argument("--source", choices=("mock", "camera", "video"))
     parser.add_argument("--detector", "--backend", choices=("mock", "yolo", "jetson", "tensorrt"))
     parser.add_argument("--video", help="Input MP4/AVI path")
+    parser.add_argument("--output-video", help="Save annotated video playback as a new MP4")
     parser.add_argument("--camera-index", type=int)
     parser.add_argument("--gstreamer", help="OpenCV capture pipeline ending in appsink")
     parser.add_argument("--model", help="Weights, SSD directory or TensorRT engine path")
@@ -78,6 +79,8 @@ def config_for(args):
         overrides["cloud"]["enabled"] = True
     if args.max_frames is not None and args.max_frames < 1:
         raise ValueError("--max-frames must be positive")
+    if args.output_video and source != "video":
+        raise ValueError("--output-video requires a video input")
     if args.stay_open and not (selected["dashboard"]["enabled"] or overrides["dashboard"].get("enabled")):
         raise ValueError("--stay-open requires an enabled dashboard")
     merge(selected, overrides)

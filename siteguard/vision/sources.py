@@ -71,6 +71,7 @@ class VideoSource:
         if not path or not Path(path).is_file():
             raise ValueError("Provide a readable video file with --video")
         self.path, self.realtime = path, realtime
+        self.fps = None
 
     def frames(self, stop):
         cv2 = open_cv()
@@ -82,6 +83,7 @@ class VideoSource:
             if not math.isfinite(fps) or fps <= 0:
                 fps = 25.0
                 LOG.warning("Video FPS unavailable; assuming 25 FPS for missing timestamps")
+            self.fps = fps
             start, last, first, count = time.monotonic(), None, None, 0
             while not stop.is_set():
                 ok, image = cap.read()

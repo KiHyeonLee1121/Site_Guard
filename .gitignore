@@ -7,6 +7,7 @@ dist/
 .env
 data/
 config/roi.local.json
+config/roi.local.*.json
 *.sqlite*
 *.log
 *.avi
